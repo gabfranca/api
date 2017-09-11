@@ -14,7 +14,6 @@
      $login = $json[0]->login;
      $senha = $json[0]->senha;
    
- 
      $con =  DBConnect(); 
      //@pg_close($con); //Encerrrar Conexão
      
@@ -59,7 +58,6 @@
          criaSessao($data[0]['cdUsuario']);
          jsonResult('true', $data, 'Login efetuado com sucesso!');
      }
-     
     }
 }
  ?>

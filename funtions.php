@@ -15,7 +15,6 @@ function executeQuery($sql, $link)
 
     mysqli_query($link, $sql);
     $affectedRows =  mysqli_affected_rows($link); 
-  //  DBClose($link);
     return  $affectedRows;
 }
 
@@ -92,4 +91,46 @@ function removerGrupo($data)
     DBClose($link);
 }
 
+// PERGUNTAS MATERIA
+function getPgtsMateria()
+{   
+    $result = DBRead('perguntamateria');
+    if($result)
+    {
+        jsonResult('true', $result, '');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
+function getPgtMateriaById($cd_pergunta)
+{   
+    $query = "select * from perguntamateria where cd_pergunta = {$cd_pergunta}";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
+
+function getPgtMateriaByUser($cd_usuario)
+{   
+    $query = "select * from perguntamateria where add_por = {$cd_usuario}";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
 ?>

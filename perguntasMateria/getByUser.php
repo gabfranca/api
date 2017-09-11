@@ -8,13 +8,8 @@ header('Content-Type:' . "application/json" );
  require '../funtions.php'; 
 
  $request_body = file_get_contents('php://input');
- $json = json_decode($request_body, true); 
+ $json = json_decode($request_body); 
+ $codigo = $json[0]->cd_usuario;
 
-
- //$codigo = $json[0]->id;
-
-$result = removerGrupo($json);
-
-
-
+ getPgtMateriaByUser($codigo);
 ?>

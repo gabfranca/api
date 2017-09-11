@@ -5,7 +5,6 @@
     {
         $link = DBConnect(); 
         $result = @mysqli_query($link, $query) or die(mysqli_error($link));
-
         DBClose($link);
         return $result;
     }
@@ -27,6 +26,23 @@
     {
         $params = ($params)? "{$params}":null;
         $query = "select {$fields} from {$table} {$params}";
+       $result = DBExecute($query);
+      
+      //  echo $query;
+        if(!mysqli_num_rows($result))
+        return false;
+        else
+         while ($res = mysqli_fetch_assoc($result))
+        {
+            $data[] = $res;
+        }
+        return $data;
+    }
+
+    function DataReader($query)
+    {
+       // $params = ($params)? "{$params}":null;
+     //   $query = "select {$fields} from {$table} {$params}";
        $result = DBExecute($query);
       
       //  echo $query;
