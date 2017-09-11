@@ -91,6 +91,48 @@ function removerGrupo($data)
     DBClose($link);
 }
 
+function getGrupos()
+{   
+    $query = "select * from grupo";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
+function getGrupoById($id)
+{
+    $query = "select * from grupo where cdGrupo = {$id}";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
+function getGrupoByUser($id)
+{
+    $query = "select * from grupo where criado_por = {$id}";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
 // PERGUNTAS MATERIA
 function getPgtsMateria()
 {   
@@ -133,4 +175,50 @@ function getPgtMateriaByUser($cd_usuario)
         jsonResult('false', null, 'A busca não retornou nenhum dado!');
     }
 }
+
+//PERGUNTAS DESAFIO 
+
+function getPgtsDesafio()
+{   
+    $query = "select * from pergunta";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
+function getPgtDesafioById($cd_pergunta)
+{   
+    $query = "select * from pergunta where cdPergunta = {$cd_pergunta}";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
+
+function getPgtDesafioByUser($cd_usuario)
+{   
+    $query = "select * from pergunta where add_por = {$cd_usuario}";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
 ?>

@@ -11,6 +11,6 @@ header('Content-Type:' . "application/json" );
  //$json = json_decode($request_body); 
  //$codigo = $json[0]->id;
  $codigo = $_GET['id'];
- getGrupoById($codigo);
+ getGrupoByUser($codigo);
 
 ?>
