@@ -5,10 +5,27 @@
     <title>Document</title>
 </head>
 <body> 
-<form action="http://portaldoaluno.unisanta.br/Acesso/Login" method="post"> 
+<form action="http://portaldoaluno.unisanta.br/Acesso/Login" id="formInserir" method="post"> 
 <input type="text" name="RA" value="123412">
 <input type="text" name="Senha" value="280396"> 
-<input type="submit" value="send">
+
+<button id="sub"></button>
+<span id="#resul"></span>
 </form> yjtyjuyuy
 </body>
 </html>
+
+<script>
+
+$("#sub").click( function() {
+     $.post( $("#formInserir").attr("action"), 
+             $("#formInserir :input").serializeArray(), 
+             function(info){ $("#result").html(info); 
+    
+       });
+    }   );
+     
+    $("#formInserir").submit( function() {
+      return false;	
+    });
+</script>

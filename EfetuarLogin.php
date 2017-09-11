@@ -1,7 +1,7 @@
 
 <?php
 //Definir formato de arquivo
- header('Content-Type:' . "text/plain ;charset=utf-8" );
+ header('Content-Type:' . "application/json;" );
 
  require 'config.php';
  require 'connection.php';
@@ -19,8 +19,9 @@
      //@pg_close($con); //Encerrrar Conexão
      
      if(!$con) {
-      echo '[{"erro": "Não foi possível conectar ao banco"';
-      echo '}]';
+      //echo '[{"erro": "Não foi possível conectar ao banco"';
+      //echo '}]';
+      jsonResult('false' , null, 'Não foi possível conectar ao banco');
       }else {
       //SQL de BUSCA LISTAGEM
       $result = buscaUsuario($login, $senha);
@@ -32,12 +33,14 @@
       
      if (!$result) {
       //Caso não haja retorno
-      echo '[{"erro": "Há algum erro com a busca. Não retorna resultados"';
-      echo '}]';
+      //echo '[{"erro": "Há algum erro com a busca. Não retorna resultados"';
+      //echo '}]';
+      jsonResult('false', null, 'Há algum erro com a busca. Não retorna resultados');
       }else if($n<1) {
       //Caso não tenha nenhum item
-      echo '[{"erro": "Não há nenhum dado cadastrado"';
-      echo '}]';
+      //echo '[{"erro": "Não há nenhum dado cadastrado"';
+      //echo '}]';
+      jsonResult('false', null, 'Não há nenhum dado cadastrado');
       }else {
       //Mesclar resultados em um array
   
@@ -50,11 +53,11 @@
     
      $auth = sessaoAtiva($data[0]['cdUsuario']);
      if ($auth ==true) {
-         echo '[{"retorno": "Usuário já está ativo! impossível efetuar login."}]';
+         jsonResult('false', null , 'Usuário já está ativo! impossível efetuar login.');
+       //  echo '[{"retorno": "Usuário já está ativo! impossível efetuar login."}]';
      } else {
          criaSessao($data[0]['cdUsuario']);
-         //$retorno[] = $data[]
-         echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+         jsonResult('true', $data, 'Login efetuado com sucesso!');
      }
      
     }

@@ -1,6 +1,6 @@
 <?php
 
-header('Content-Type:' . "text/plain ;charset=utf-8" );
+header('Content-Type:' . "application/json;" );
 
  require 'config.php';
  require 'connection.php';
@@ -13,6 +13,6 @@ header('Content-Type:' . "text/plain ;charset=utf-8" );
  $codigo = $json[0]->cd_usuario;
  $result = encerrarSessao($codigo);
 
- json_encode($result, JSON_PRETTY_PRINT);
+ //echo json_encode($result, JSON_PRETTY_PRINT);
 
 ?>

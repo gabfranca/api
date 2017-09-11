@@ -1,6 +1,5 @@
 <?php
 
-require 'classe.php';
 $request_body = file_get_contents('php://input');
 $json = json_decode($request_body);
 
@@ -37,28 +36,18 @@ json_encode($json, JSON_PRETTY_PRINT);
         return $response;
     }
 
-    function post($nome, $senha)
-    {
-        $fields = array(
-            'name' => $nome,
-            'pass' => $senha
-        );
-
-        
-        $response = HTTPRequester::HTTPost("http://localhost:8090/tcc/login", $fields);
-        ;
-    }
 
     $host = 'http://localhost:8090/tcc/login';
-    $url = 'http://portaldoaluno.unisanta.br/Acesso/Login';
-    $username = '123412';
-    $password = '280396';
-    $data = array ('action' => 'Acesso/Login','RA' => $username, 'Senha' => $password, 'format' => 'txt');
+    $url = 'https://www.facebook.com/login.php?login_attempt=1&lwv=110';
+    $username = 'gabriel_pk1@hotmail.com';
+    $password = '2831996ZZ!';
+    $data = array ('action' => 'Acesso/Login','email' => $username, 'pass' => $password, 'format' => 'multipart/form-data');
     $data = http_build_query($data);
     echo $data;
-    $reply = post($url, $data);
+    $reply = do_post_request($url, $data);
     echo "**********Response*********";
      echo var_dump($reply);
+     echo $reply;
     $a = 'Login - Portal de alunos Unisanta';
     
     if (strpos($reply, $a) !== false) {
