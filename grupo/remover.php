@@ -10,11 +10,8 @@ header('Content-Type:' . "application/json" );
  $request_body = file_get_contents('php://input');
  $json = json_decode($request_body, true); 
 
-
  //$codigo = $json[0]->id;
 
 $result = removerGrupo($json);
-
-
 
 ?>
