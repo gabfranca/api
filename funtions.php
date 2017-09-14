@@ -228,6 +228,36 @@ function getPgtsMateria()
     }
 }
 
+function getPerguntasGrupoByPerguntas($id)
+{
+    $query = "select g.cdGrupo, g.nm_grupo, pg.cd_perguntagrupo  from grupo g join perguntagrupo pg
+on (g.cdGrupo = pg.cd_grupo and pg.cd_pergunta = {$id})";
+    $result = DataReader($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Busca efetuada com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'A busca não retornou nenhum dado!');
+    }
+}
+
+
+function removePerguntaGrupo($id)
+{
+    $query = " delete from perguntagrupo where cd_perguntagrupo = {$id};";
+    $result = DBExecute($query);
+    if($result)
+    {
+        jsonResult('true', $result, 'Removido com sucesso!');
+    }
+    else
+    {
+        jsonResult('false', null, 'Ocorreu um erro ao remover!');
+    }
+}
+
 function getPgtMateriaById($cd_pergunta)
 {
     $query = "select * from perguntamateria where cd_pergunta = {$cd_pergunta}";
