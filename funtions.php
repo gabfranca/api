@@ -59,9 +59,9 @@ function encerrarSessao($cd_usuario)
     $sql =  "update sessao set ativo = 0 where cd_usuario = {$cd_usuario}";
     $result  = executeQuery($sql, $link);
     if ($result>0) {
-        jsonResult("true", null,"Affected rows: {$result}");
+        jsonResult("true", null, "Sessão encerrada com sucesso!");
     } else {
-        jsonResult("false", null, mysqli_error($link));
+        jsonResult("false", null, 'Sessão Inválida!'.mysqli_error($link));
     }
     DBClose($link);
 }
@@ -72,9 +72,6 @@ function getSessao($user)
     $result = DataReader($query);
     return $result[0]['cd_sessao'];
 }
-
-
-
 
 // FUNÇÕES PARA GRUPO
 
@@ -359,16 +356,23 @@ function validaUsuario($param)
    return $result;
 }
 
+  //RETORNA O ID DO USUARIO QUE ACABOU DE SER INSERIDO
 function cadastraUsuario($nome, $login, $senha, $tp)
 {
-   $link = DBConnect();
+    $link = DBConnect();
     $QUERY ="INSERT INTO USUARIO VALUES (null, '{$nome}', {$senha},'{$login}', $tp)";
-
     $row = executeQuery($QUERY,$link);
     $last_id =  mysqli_insert_id($link);
-    echo $last_id;
     DBClose($link);
     return  $last_id;
+
+}
+
+//PARTIDA
+
+function getToken($user, $sessao) {
+  $token = strtoupper(substr(md5($user.$sessao), 0, 8));
+  return $token;
 }
 
 ?>
