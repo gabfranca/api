@@ -18,6 +18,14 @@ function executeQuery($sql, $link)
     return  $affectedRows;
 }
 
+function getNomeUsuario($id)
+{
+    $query = "select nmUsuario from usuario where cdUsuario = {$id}";
+    $result = DataReader($query);
+    return $result[0]['nmUsuario'];
+}
+
+
 function buscaUsuario($login, $senha)
 {
     $sql = "select * from usuario where nmlogin = {$login} and password = {$senha}";
@@ -57,6 +65,15 @@ function encerrarSessao($cd_usuario)
     }
     DBClose($link);
 }
+
+function getSessao($user)
+{
+    $query = "select cd_sessao from sessao where cd_usuario = {$user}";
+    $result = DataReader($query);
+    return $result[0]['cd_sessao'];
+}
+
+
 
 
 // FUNÇÕES PARA GRUPO
@@ -244,6 +261,8 @@ on (g.cdGrupo = pg.cd_grupo and pg.cd_pergunta = {$id})";
 }
 
 
+
+
 function removePerguntaGrupo($id)
 {
     $query = " delete from perguntagrupo where cd_perguntagrupo = {$id};";
@@ -330,6 +349,26 @@ function getPgtDesafioByUser($cd_usuario)
     {
         jsonResult('false', null, 'A busca não retornou nenhum dado!');
     }
+}
+
+//USUARIO
+function validaUsuario($param)
+{
+   $QUERY = "SELECT * FROM USUARIO WHERE nmlogin = '{$param}'";
+   $result = DataReader($QUERY);
+   return $result;
+}
+
+function cadastraUsuario($nome, $login, $senha, $tp)
+{
+   $link = DBConnect();
+    $QUERY ="INSERT INTO USUARIO VALUES (null, '{$nome}', {$senha},'{$login}', $tp)";
+
+    $row = executeQuery($QUERY,$link);
+    $last_id =  mysqli_insert_id($link);
+    echo $last_id;
+    DBClose($link);
+    return  $last_id;
 }
 
 ?>
