@@ -1,24 +1,21 @@
 <?php
 
 header('Content-Type:' . "application/json" );
-
- require '../config.php';
- require '../connection.php';
- require '../database.php';
- require '../funtions.php';
- require '../classes.php';
+ require '../include.php';
 
  $codigo = $_GET['id'];
+ $qt_equipes = $_GET['qt'];
+ $grupo = $_GET['grupo'];
  $sessao = getSessao($codigo);
- $token = getToken($codigo,$sessao);
-
+ $token = getTokenPartida($codigo,$sessao);
 
  if ($sessao>0) {
-   $token = array('TokenPartida' => $token );
+  criaNovaPartida($token, $codigo,$qt_equipes, $grupo);
+  $token = array('TokenPartida' => $token );
   jsonResult('true', $token, "Token Gerado com sucesso!");
  }
  else
  {
-     jsonResult('true', $token, "Usuário não está conectado, não é possível iniciar uma nova partida!");
+     jsonResult('true', null, "Usuário não está conectado, não é possível iniciar uma nova partida!");
  }
 ?>

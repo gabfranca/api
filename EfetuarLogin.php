@@ -35,17 +35,20 @@
           // $dados[] = mysql_fetch_assoc($result);
      }
 
-     $response = array(
-       'cd_usuario' => $data[0]['cdUsuario'],
-       'nome' => $data[0]['nmUsuario'],
-       'sessao' => getSessao($data[0]['cdUsuario'])
-      );
+echo getSessao($data[0]['cdUsuario']);
 
      $auth = sessaoAtiva($data[0]['cdUsuario']);
      if ($auth ==true) {
          jsonResult('false', null , 'Usuário já está ativo! impossível efetuar login.');
      } else {
-         criaSessao($data[0]['cdUsuario']);
+       criaSessao($data[0]['cdUsuario']);
+
+       $response = array(
+         'cd_usuario' => $data[0]['cdUsuario'],
+         'nome' => $data[0]['nmUsuario'],
+         'sessao' => getSessao($data[0]['cdUsuario'])
+        );
+
          jsonResult('true', $response, 'Login efetuado com sucesso!');
      }
     }

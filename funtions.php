@@ -28,7 +28,7 @@ function getNomeUsuario($id)
 
 function buscaUsuario($login, $senha)
 {
-    $sql = "select * from usuario where nmlogin = {$login} and password = {$senha}";
+    $sql = "select * from usuario where nmlogin = '{$login}' and password = {$senha}";
     $result = DBExecute($sql); //Executar a SQL
     return $result;
     //RETORNA OS DADOS DO USUÁRIO
@@ -370,9 +370,52 @@ function cadastraUsuario($nome, $login, $senha, $tp)
 
 //PARTIDA
 
-function getToken($user, $sessao) {
+function getTokenPartida($user, $sessao) {
   $token = strtoupper(substr(md5($user.$sessao), 0, 8));
   return $token;
+}
+
+
+function getTokenEquipe($user, $sessao) {
+  $token = strtoupper(substr(md5($user.$sessao), 0, 8));
+  return $token;
+}
+
+
+
+function criaNovaPartida($token, $adm, $qt, $grupo)
+{
+    $link = DBConnect();
+    $query = "insert into partida values (null, '{$token}', {$adm}, {$qt},{$grupo}, 1)";
+    $result = executeQuery($query, $link);
+    DBClose($link);
+    return $result;
+}
+
+
+function criaNovaEquipe($equipe, $pontos, $tokenPartida, $tokenEquipe, $lider)
+{
+    $link = DBConnect();
+
+    $query = "insert into equipe values (null, '{$equipe}', {$pontos}, '{$tokenPartida}', '{$tokenEquipe}', {$lider})";
+    $result = executeQuery($query, $link);
+    DBClose($link);
+    return $result;
+}
+
+function conectaJogador($usuario, $nome, $tokenEquipe)
+{
+    $link = DBConnect();
+    $query = "insert into jogador values ({$usuario}, '{$nome}', '{$tokenEquipe}')";
+    $result = executeQuery($query, $link);
+    return $result;
+}
+
+function getEquipesPartida($token)
+{
+    $sql =   "select cd_equipe, nm_equipe  , nmUsuario as Lider from equipe e
+     join usuario u on (e.cd_lider = u.cdusuario) where e.token_partida = '{$token}' order by cd_equipe";
+    return DataReader($sql);
 }
 
 ?>
