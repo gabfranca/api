@@ -35,11 +35,11 @@
           // $dados[] = mysql_fetch_assoc($result);
      }
 
-echo getSessao($data[0]['cdUsuario']);
+ getSessao($data[0]['cdUsuario']);
 
      $auth = sessaoAtiva($data[0]['cdUsuario']);
      if ($auth ==true) {
-         jsonResult('false', null , 'Usuário já está ativo! impossível efetuar login.');
+         jsonResult('false', 'null' , 'Usuário já está ativo! impossível efetuar login.');
      } else {
        criaSessao($data[0]['cdUsuario']);
 

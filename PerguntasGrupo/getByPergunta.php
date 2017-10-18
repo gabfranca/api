@@ -12,7 +12,7 @@ header('Content-Type:' . "application/json" );
  //$codigo = $json[0]->id;
 
  if(isset($_GET['id']) == false ) {
-   jsonResult('false' , null , 'No parameters received.');
+   jsonResult('false' , 'null' , 'No parameters received.');
 
  } else {
 

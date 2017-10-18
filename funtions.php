@@ -159,7 +159,7 @@ function addPerguntaGrupo($cd_grupo, $cd_pergunta)
   else
   {
     $qtPerguntasGrupo = qtPerguntasGrupo($cd_grupo);
-    if ($qtPerguntasGrupo<100) {
+    if ($qtPerguntasGrupo<50) {
       $id_grupo = lastOrdemGrupo($cd_grupo);
       $query = "insert into perguntagrupo (id_grupo, cd_grupo, cd_pergunta) VALUES ({$id_grupo}, {$cd_grupo},{$cd_pergunta});";
       $rowcount = executeQuery($query, $link);
@@ -173,7 +173,7 @@ function addPerguntaGrupo($cd_grupo, $cd_pergunta)
       }
     }
     else {
-        jsonResult('false', null, 'Este Grupo já possui 100 questões! Não é possível incluir mais.');
+        jsonResult('false', null, 'Este Grupo completo de questões! Não é possível incluir mais.');
     }
   }
    DBClose($link);
@@ -397,7 +397,7 @@ function criaNovaEquipe($equipe, $pontos, $tokenPartida, $tokenEquipe, $lider)
 {
     $link = DBConnect();
 
-    $query = "insert into equipe values (null, '{$equipe}', {$pontos}, '{$tokenPartida}', '{$tokenEquipe}', {$lider})";
+    $query = "insert into equipe values (null, '{$equipe}', {$pontos}, 1 ,'{$tokenPartida}', '{$tokenEquipe}', {$lider})";
     $result = executeQuery($query, $link);
     DBClose($link);
     return $result;
