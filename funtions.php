@@ -59,9 +59,9 @@ function encerrarSessao($cd_usuario)
     $sql =  "update sessao set ativo = 0 where cd_usuario = {$cd_usuario}";
     $result  = executeQuery($sql, $link);
     if ($result>0) {
-        jsonResult("true", null, "Sessão encerrada com sucesso!");
+        jsonResult("true", 'null', "Sessão encerrada com sucesso!");
     } else {
-        jsonResult("false", null, 'Sessão Inválida!'.mysqli_error($link));
+        jsonResult("false", 'null', 'Sessão Inválida!'.mysqli_error($link));
     }
     DBClose($link);
 }
@@ -89,7 +89,7 @@ function criarGrupo($nm_grupo, $cd_usuario)
     DBClose($link);
 }
 
-function removerGrupo($data)
+function removerGrupoByIdList($data)
 {
     $link = DBConnect();
     $rows = 0;
@@ -416,6 +416,21 @@ function getEquipesPartida($token)
     $sql =   "select cd_equipe, nm_equipe  , nmUsuario as Lider from equipe e
      join usuario u on (e.cd_lider = u.cdusuario) where e.token_partida = '{$token}' order by cd_equipe";
     return DataReader($sql);
+}
+
+function removerGrupo($id)
+{
+    $query =  "call removeGrupo({$id});";
+
+    $result =  DBExecute($query);
+    if ($result >0) {
+      jsonResult("true", 'null',"Excluido com sucesso!");
+    } else {
+      jsonResult("false", 'null',"Ocorreu algum erro!");
+    }
+
+
+
 }
 
 ?>

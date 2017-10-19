@@ -44,12 +44,14 @@
        criaSessao($data[0]['cdUsuario']);
 
        $response = array(
+        'sucess' => 'true',
          'cd_usuario' => $data[0]['cdUsuario'],
          'nome' => $data[0]['nmUsuario'],
-         'sessao' => getSessao($data[0]['cdUsuario'])
-        );
+         'sessao' => getSessao($data[0]['cdUsuario']),
+         'message' => 'Login efetuado com sucesso!');
 
-         jsonResult('true', $response, 'Login efetuado com sucesso!');
+         echo json_encode($response, JSON_PRETTY_PRINT);
+        // jsonResult('true', $response, 'Login efetuado com sucesso!');
      }
     }
 }

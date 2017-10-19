@@ -27,10 +27,10 @@ if (!$result) {
    jsonResult('true', $data, 'Usuário cadastrado com sucesso!');
   }
   else {
-     jsonResult('false', null, 'Ocorreu algum erro!');
+     jsonResult('false', 'null', 'Ocorreu algum erro!');
   }
 }
  else {
-  jsonResult('false', null, 'Nome de usuario já existe! Utilize outro.');
+  jsonResult('false', 'null', 'Nome de usuario já existe! Utilize outro.');
 }
 ?>
