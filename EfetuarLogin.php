@@ -48,6 +48,7 @@
          'cd_usuario' => $data[0]['cdUsuario'],
          'nome' => $data[0]['nmUsuario'],
          'sessao' => getSessao($data[0]['cdUsuario']),
+         'tp_usuario' => getSessao($data[0]['cd_tipoUsuario']),
          'message' => 'Login efetuado com sucesso!');
 
          echo json_encode($response, JSON_PRETTY_PRINT);
