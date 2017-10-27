@@ -11,8 +11,11 @@ header('Content-Type:' . "application/json" );
 
  if ($sessao>0) {
   criaNovaPartida($token, $codigo,$qt_equipes, $grupo);
-  $token = array('TokenPartida' => $token );
-  jsonResult('true', $token, "Token Gerado com sucesso!");
+//  $token = array('TokenPartida' => $token );
+
+  $json = '{ "sucess":"true", "token_partida":"'.$token.'", "message": "Token Gerado com sucesso!"}';
+  echo $json;
+//  jsonResult('true', $tk, "Token Gerado com sucesso!");
  }
  else
  {

@@ -68,7 +68,7 @@ function encerrarSessao($cd_usuario)
 
 function getSessao($user)
 {
-    $query = "select cd_sessao from sessao where cd_usuario = {$user}";
+    $query = "select cd_sessao from sessao where cd_usuario = {$user} and ativo = 1";
     $result = DataReader($query);
     return $result[0]['cd_sessao'];
 }
@@ -396,8 +396,13 @@ function criaNovaPartida($token, $adm, $qt, $grupo)
 function criaNovaEquipe($equipe, $pontos, $tokenPartida, $tokenEquipe, $lider)
 {
     $link = DBConnect();
-
-    $query = "insert into equipe values (null, '{$equipe}', {$pontos}, 1 ,'{$tokenPartida}', '{$tokenEquipe}', {$lider})";
+    $sql= "select IFNULL(pino, 0)+1 as cor from equipe where token_equipe = '{$tokenEquipe}'";
+    $result = executeQuery($sql, $link);
+    echo $sql;
+     $cor_pino =   $result[0]['pino'];
+       echo $cor_pino;
+    $query = "insert into equipe values (null, '{$equipe}', {$pontos}, 1 ,'{$tokenPartida}', '{$tokenEquipe}', {$lider}, {$cor_pino})";
+echo $query;
     $result = executeQuery($query, $link);
     DBClose($link);
     return $result;
@@ -417,6 +422,16 @@ function getEquipesPartida($token)
      join usuario u on (e.cd_lider = u.cdusuario) where e.token_partida = '{$token}' order by cd_equipe";
     return DataReader($sql);
 }
+
+
+function getRankingEquipes($token)
+{
+    $sql =   "select cd_equipe, nm_equipe  ,pontos , pos_tabuleiro, nmUsuario as Lider from equipe e
+     join usuario u on (e.cd_lider = u.cdusuario) where e.token_partida = '{$token}' order by  cd_equipe desc";
+    return DataReader($sql);
+}
+
+
 
 function removerGrupo($id)
 {

@@ -24,11 +24,11 @@
    }
    else
    {
-     jsonResult('false', null, "Token inválido ou partida já foi encerrada!");
+     jsonResult('false', 'null', "Token inválido ou partida já foi encerrada!");
    }
  }
  else
  {
-     jsonResult('false', null, "Usuário não está conectado, não é possível iniciar uma nova partida!");
+     jsonResult('false', 'null', "Usuário não está conectado, não é possível iniciar uma nova partida!");
  }
 ?>

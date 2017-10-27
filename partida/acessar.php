@@ -6,7 +6,7 @@
  $codigo = $_GET['id'];
  $tokenPartida = $_GET['token'];
  $sessao = getSessao($codigo);
-echo $tokenPartida;
+//echo $tokenPartida;
 
  if ($sessao>0)
  {
@@ -14,15 +14,15 @@ echo $tokenPartida;
    $result_partida =  DataReader($sql);
    $qt = $result_partida[0]['qt_lideres'];
 
-   echo $qt;
+//   echo $qt;
    if ($result_partida)
    {
      $result =  getEquipesPartida($tokenPartida);
      $count =  count($result);
       if ($count < $qt)
       {
-        $array = array('lideres_restantes' => $qt-$count);
-        jsonResult('false',$array, 'Faltam '.$qt - $count.' se conectarem a Partida.'  );
+      //  $array = array('lideres_restantes' => $qt-$count);
+        jsonResult('false',$result, 'Aguardando '.($qt - $count).' lideres se conectarem a Partida.'  );
       }
         else if ($count == $qt)
       {
@@ -30,7 +30,7 @@ echo $tokenPartida;
       }
       else
       {
-         jsonResult('false',null, 'Há mais equipes conectadas do que o permitido!' );
+         jsonResult('false','null', 'Há mais equipes conectadas do que o permitido!' );
       }
    }
    else

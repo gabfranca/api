@@ -17,14 +17,14 @@ header('Content-Type:' . "application/json" );
    if ($result)
    {
      conectaJogador($codigo, $nmJogador, $tokenEquipe);
-     jsonResult('true', null, "Jogador conectado à equipe com sucesso!");
+     jsonResult('true', 'null', "Jogador conectado à equipe com sucesso!");
    } else
    {
-      jsonResult('false', null, "Token de Equipe inválido!");
+      jsonResult('false', 'null', "Token de Equipe inválido!");
    }
 }
  else
  {
-     jsonResult('false', null, "Usuário não está conectado ao jogo, não é possível iniciar uma nova partida!");
+     jsonResult('false', 'null', "Usuário não está conectado ao jogo, não é possível iniciar uma nova partida!");
  }
 ?>
