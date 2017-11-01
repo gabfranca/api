@@ -258,8 +258,6 @@ on (g.cdGrupo = pg.cd_grupo and pg.cd_pergunta = {$id})";
 }
 
 
-
-
 function removePerguntaGrupo($id)
 {
     $query = " delete from perguntagrupo where cd_perguntagrupo = {$id};";
@@ -319,6 +317,8 @@ function getPgtsDesafio()
     }
 }
 
+
+
 function getPgtDesafioById($cd_pergunta)
 {
     $query = "select * from pergunta where cdPergunta = {$cd_pergunta}";
@@ -370,7 +370,7 @@ function cadastraUsuario($nome, $login, $senha, $tp)
 
 //PARTIDA
 
-function getTokenPartida($user, $sessao) {
+function getTokenPartida($user, $sessao) {   
   $token = strtoupper(substr(md5($user.$sessao), 0, 8));
   return $token;
 }
@@ -381,6 +381,13 @@ function getTokenEquipe($user, $sessao) {
   return $token;
 }
 
+function encerrarPartida($token)
+{
+    $link = DBConnect();
+    $sql = "call encerrarPartida('{$token}');";
+    $result = executeQuery($sql, $link);
+    DBClose($link);
+}
 
 
 function criaNovaPartida($token, $adm, $qt, $grupo)
@@ -392,6 +399,12 @@ function criaNovaPartida($token, $adm, $qt, $grupo)
     return $result;
 }
 
+function partidaAndamento($cd_usuario)
+{
+    $sql = "select token from partida where cd_adm = {$cd_usuario} and andamento = 1"; 
+    $result = DataReader($sql); 
+    return $result;
+}
 
 function criaNovaEquipe($equipe, $pontos, $tokenPartida, $tokenEquipe, $lider)
 {
@@ -423,15 +436,12 @@ function getEquipesPartida($token)
     return DataReader($sql);
 }
 
-
 function getRankingEquipes($token)
 {
     $sql =   "select cd_equipe, nm_equipe  ,pontos , pos_tabuleiro, nmUsuario as Lider from equipe e
      join usuario u on (e.cd_lider = u.cdusuario) where e.token_partida = '{$token}' order by  cd_equipe desc";
     return DataReader($sql);
 }
-
-
 
 function removerGrupo($id)
 {
@@ -443,9 +453,6 @@ function removerGrupo($id)
     } else {
       jsonResult("false", 'null',"Ocorreu algum erro!");
     }
-
-
-
 }
 
 ?>

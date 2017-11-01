@@ -8,17 +8,27 @@ header('Content-Type:' . "application/json" );
  $grupo = $_GET['grupo'];
  $sessao = getSessao($codigo);
  $token = getTokenPartida($codigo,$sessao);
-
+ $responseMessage = "";
  if ($sessao>0) {
-  criaNovaPartida($token, $codigo,$qt_equipes, $grupo);
-//  $token = array('TokenPartida' => $token );
+  
+  $result = partidaAndamento($codigo); 
+  if($result)
+  {
+    $token = $result[0]["token"];
+    $responseMessage="Você já possui uma partida em andamento! Continue com esta ou encerre para criar uma nova partida.";
+  }
+  else
+  {
+   criaNovaPartida($token, $codigo,$qt_equipes, $grupo);
+   $responseMessage="Token Gerado com sucesso!";
+  }
 
-  $json = '{ "sucess":"true", "token_partida":"'.$token.'", "message": "Token Gerado com sucesso!"}';
+  $json = '{ "sucess":"true", "token_partida":"'.$token.'", "message": "'.$responseMessage.'"}';
   echo $json;
-//  jsonResult('true', $tk, "Token Gerado com sucesso!");
  }
  else
  {
-     jsonResult('true', null, "Usuário não está conectado, não é possível iniciar uma nova partida!");
+   $responseMessage="Usuário não esta conectado! Não foi possível criar uma nova partida.";
+  $json = '{ "sucess":"false", "token_partida":"[]", "message": '.$responseMessage.'}';
  }
 ?>

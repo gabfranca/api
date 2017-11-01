@@ -22,6 +22,10 @@
       if ($count < $qt)
       {
       //  $array = array('lideres_restantes' => $qt-$count);
+      if($result == false)
+      {
+        $result = "[]";
+      }
         jsonResult('false',$result, 'Aguardando '.($qt - $count).' lideres se conectarem a Partida.'  );
       }
         else if ($count == $qt)
@@ -35,11 +39,11 @@
    }
    else
    {
-     jsonResult('false', null, "Token inválido ou partida já foi encerrada!");
+     jsonResult('false', 'null', "Token inválido ou partida já foi encerrada!");
    }
  }
  else
  {
-     jsonResult('false', null, "Usuário não está conectado, não é possível iniciar uma nova partida!");
+     jsonResult('false', 'null', "Usuário não está conectado, não é possível iniciar uma nova partida!");
  }
 ?>
