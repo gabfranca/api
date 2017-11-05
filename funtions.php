@@ -376,6 +376,16 @@ function getTokenPartida($user, $sessao) {
 }
 
 
+function setVezJogador($vez, $token_equipe)
+{
+    $link = DBConnect();
+    executeQuery("call setSafeUpdate(0);", $link); 
+    $sqlUpdate =  "update equipe set minha_vez = {$vez} WHERE token_equipe = '{$token_equipe}';"; 
+    executeQuery($sqlUpdate, $link);
+    DBClose($link);
+    
+}
+
 function getTokenEquipe($user, $sessao) {
   $token = strtoupper(substr(md5($user.$sessao), 0, 8));
   return $token;
@@ -409,15 +419,32 @@ function partidaAndamento($cd_usuario)
 function criaNovaEquipe($equipe, $pontos, $tokenPartida, $tokenEquipe, $lider)
 {
     $link = DBConnect();
-    $sql= "select IFNULL(pino, 0)+1 as cor from equipe where token_equipe = '{$tokenEquipe}'";
-    $result = executeQuery($sql, $link);
-    echo $sql;
-     $cor_pino =   $result[0]['pino'];
-       echo $cor_pino;
-    $query = "insert into equipe values (null, '{$equipe}', {$pontos}, 1 ,'{$tokenPartida}', '{$tokenEquipe}', {$lider}, {$cor_pino})";
-echo $query;
+    $sql= "select max(ordem_partida) as ordem_partida from equipe where token_partida = '{$tokenPartida}'";
+    $result = DataReader($sql);
+  //  echo var_dump($result);
+  $minha_vez = 0;
+    if($result)
+    {
+        $ordem_partida =   $result[0]['ordem_partida'];
+        $ordem_partida = $ordem_partida+1;
+    }
+    else
+    {
+        $ordem_partida = 1;
+        $minha_vez = 1;
+    }
+    
+    $query = "insert into equipe values (null, '{$equipe}', {$pontos}, 1 ,'{$tokenPartida}', '{$tokenEquipe}', {$lider}, {$ordem_partida},{$minha_vez})";
+
     $result = executeQuery($query, $link);
     DBClose($link);
+    return $result;
+}
+
+function getVezEquipe($token_partida)
+{
+    $query = "select nm_equipe, token_equipe, ordem_partida from equipe where token_partida = '{$token_partida}' and minha_vez = 1"; 
+    $result = DataReader($query);
     return $result;
 }
 

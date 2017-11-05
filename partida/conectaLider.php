@@ -8,7 +8,7 @@
  $nmEquipe = $_GET['nmEquipe'];
  $sessao = getSessao($codigo);
  $token = getTokenEquipe($codigo,$sessao);
-
+ $responseMessage = "";
 
  $nmJogador = getNomeUsuario($codigo);
  if ($sessao>0)
@@ -19,16 +19,21 @@
    {
      criaNovaEquipe($nmEquipe, 500, $tokenPartida, $token, $codigo);
      conectaJogador($codigo, $nmJogador, $token);
-     $token = array('tokenEquipe' => $token );
-     jsonResult('true', $token, "Token da equipe Gerado com sucesso!");
+     $responseMessage ="Token da equipe Gerado com sucesso!";
+     $json = '{ "sucess":"true", "token_equipe":"'.$token.'", "message": "'.$responseMessage.'"}';
+     echo $json;   
    }
    else
    {
-     jsonResult('false', 'null', "Token inválido ou partida já foi encerrada!");
+     $responseMessage = "Token inválido ou partida já foi encerrada!";
+    $json = '{ "sucess":"false", "token_equipe":"", "message": "'.$responseMessage.'"}';
+    echo $json;   
    }
  }
  else
  {
-     jsonResult('false', 'null', "Usuário não está conectado, não é possível iniciar uma nova partida!");
+  $responseMessage = "Usuário não está conectado, não é possível iniciar uma nova partida!";
+  $json = '{ "sucess":"false", "token_equipe":"", "message": "'.$responseMessage.'"}';
  }
 ?>
+
