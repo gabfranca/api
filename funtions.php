@@ -242,6 +242,30 @@ function getPgtsMateria()
     }
 }
 
+function getByTabuleiro($token_equipe, $dado)
+{
+    $sql = "select pos_tabuleiro from equipe where token_equipe =  '{$token_equipe}'";
+    $result = DataReader($sql);
+    $pos_tabuleiro = $result[0]["pos_tabuleiro"];
+    $pergunta = $pos_tabuleiro+$dado-1;
+
+    $sql = "select * from perguntamateria where cd_pergunta = {$pergunta}";
+    $result = DataReader($sql);
+    return $result;
+}
+
+function getByTabuleiroDesafio($token_equipe, $dado)
+{
+    $sql = "select pos_tabuleiro from equipe where token_equipe =  '{$token_equipe}'";
+    $result = DataReader($sql);
+    $pos_tabuleiro = $result[0]["pos_tabuleiro"];
+    $pergunta = $pos_tabuleiro+$dado-1;
+
+    $sql = "select * from pergunta where cdPergunta = {$pergunta}";
+    $result = DataReader($sql);
+    return $result;
+}
+
 function getPerguntasGrupoByPerguntas($id)
 {
     $query = "select g.cdGrupo, g.nm_grupo, pg.cd_perguntagrupo  from grupo g join perguntagrupo pg
@@ -370,8 +394,8 @@ function cadastraUsuario($nome, $login, $senha, $tp)
 
 //PARTIDA
 
-function getTokenPartida($user, $sessao) {   
-  $token = strtoupper(substr(md5($user.$sessao), 0, 8));
+function getTokenPartida($user, $sessao) {
+  $token = strtoupper(substr(md5($user.$sessao), 0, 6));
   return $token;
 }
 
@@ -379,15 +403,15 @@ function getTokenPartida($user, $sessao) {
 function setVezJogador($vez, $token_equipe)
 {
     $link = DBConnect();
-    executeQuery("call setSafeUpdate(0);", $link); 
-    $sqlUpdate =  "update equipe set minha_vez = {$vez} WHERE token_equipe = '{$token_equipe}';"; 
+    executeQuery("call setSafeUpdate(0);", $link);
+    $sqlUpdate =  "update equipe set minha_vez = {$vez} WHERE token_equipe = '{$token_equipe}';";
     executeQuery($sqlUpdate, $link);
     DBClose($link);
-    
+
 }
 
 function getTokenEquipe($user, $sessao) {
-  $token = strtoupper(substr(md5($user.$sessao), 0, 8));
+  $token = strtoupper(substr(md5($user.$sessao), 0, 6));
   return $token;
 }
 
@@ -411,8 +435,8 @@ function criaNovaPartida($token, $adm, $qt, $grupo)
 
 function partidaAndamento($cd_usuario)
 {
-    $sql = "select token from partida where cd_adm = {$cd_usuario} and andamento = 1"; 
-    $result = DataReader($sql); 
+    $sql = "select token from partida where cd_adm = {$cd_usuario} and andamento = 1";
+    $result = DataReader($sql);
     return $result;
 }
 
@@ -433,7 +457,7 @@ function criaNovaEquipe($equipe, $pontos, $tokenPartida, $tokenEquipe, $lider)
         $ordem_partida = 1;
         $minha_vez = 1;
     }
-    
+
     $query = "insert into equipe values (null, '{$equipe}', {$pontos}, 1 ,'{$tokenPartida}', '{$tokenEquipe}', {$lider}, {$ordem_partida},{$minha_vez})";
 
     $result = executeQuery($query, $link);
@@ -443,7 +467,7 @@ function criaNovaEquipe($equipe, $pontos, $tokenPartida, $tokenEquipe, $lider)
 
 function getVezEquipe($token_partida)
 {
-    $query = "select nm_equipe, token_equipe, ordem_partida from equipe where token_partida = '{$token_partida}' and minha_vez = 1"; 
+    $query = "select nm_equipe, token_equipe, ordem_partida from equipe where token_partida = '{$token_partida}' and minha_vez = 1";
     $result = DataReader($query);
     return $result;
 }
@@ -466,7 +490,7 @@ function getEquipesPartida($token)
 function getRankingEquipes($token)
 {
     $sql =   "select cd_equipe, nm_equipe  ,pontos , pos_tabuleiro, nmUsuario as Lider from equipe e
-     join usuario u on (e.cd_lider = u.cdusuario) where e.token_partida = '{$token}' order by  cd_equipe desc";
+     join usuario u on (e.cd_lider = u.cdusuario) where e.token_partida = '{$token}' order by  cd_equipe";
     return DataReader($sql);
 }
 
@@ -482,4 +506,38 @@ function removerGrupo($id)
     }
 }
 
+function finalizarJogada($token_partida, $token_equipe)
+{
+
+  setVezJogador(0, $token_equipe);
+  $query=  "select * from partida where token = '{$token_partida}';";
+  $result = DataReader($query);
+  if ($result) {
+     $qt_equipes = $result[0]["qt_lideres"];
+     $sql = "select ordem_partida from equipe where token_equipe = '{$token_equipe}'";
+     $result = DataReader($sql);
+     if ($result) {
+         $ordem_partida = $result[0]['ordem_partida'];
+          if ($ordem_partida == $qt_equipes) {
+              $ordem_partida = 0;
+          }
+         $sql = "select * from equipe where ordem_partida = ({$ordem_partida}+1) and token_partida = '{$token_partida}' ";
+         $busca = DataReader($sql);
+         setVezJogador(1, $busca[0]['token_equipe']);
+         $busca = DataReader($sql);
+        return $busca;
+     }
+  } else {
+      JsonResult("false", "[]","Token de Partida inválido!");
+  }
+}
+
+function validaLider($cd_usuario, $token_partida)
+{
+      $query = "select * from partida p
+                inner join equipe e on (p.token = e.token_partida)
+                where p.andamento = 1 and p.token = '{$token_partida}' and e.cd_lider = {$cd_usuario}";
+      $result = DataReader($query);
+      return $result;
+}
 ?>

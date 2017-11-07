@@ -13,6 +13,15 @@
  $nmJogador = getNomeUsuario($codigo);
  if ($sessao>0)
  {
+$retorno = validaLider($codigo, $tokenPartida );
+    if ($retorno) {
+      $token = $retorno[0]['token_equipe'];
+      $responseMessage="Este usuário já esta conectado como líder em uma partida em andamento!";
+      $json = '{ "sucess":"true", "token_equipe":"'.$token.'", "message": "'.$responseMessage.'"}';
+      echo $json;
+      return;
+    }
+
    $sql = "select * from partida where token = '{$tokenPartida}' and andamento = 1";
    $result =  DataReader($sql);
    if ($result)
@@ -21,13 +30,13 @@
      conectaJogador($codigo, $nmJogador, $token);
      $responseMessage ="Token da equipe Gerado com sucesso!";
      $json = '{ "sucess":"true", "token_equipe":"'.$token.'", "message": "'.$responseMessage.'"}';
-     echo $json;   
+     echo $json;
    }
    else
    {
      $responseMessage = "Token inválido ou partida já foi encerrada!";
     $json = '{ "sucess":"false", "token_equipe":"", "message": "'.$responseMessage.'"}';
-    echo $json;   
+    echo $json;
    }
  }
  else
@@ -36,4 +45,3 @@
   $json = '{ "sucess":"false", "token_equipe":"", "message": "'.$responseMessage.'"}';
  }
 ?>
-
